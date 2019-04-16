@@ -20,19 +20,13 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
         null,
         props.person.name,
         ", ",
-        props.person.title
+        props.person.title,
+        " "
       ),
       React.createElement(
         "p",
         null,
-        React.createElement("img", {
-          className: "size-medium alignright",
-          src: props.person.img,
-          alt: props.person.name,
-          width: "300",
-          height: "300",
-          sizes: "(max-width: 300px) 100vw, 300px"
-        }),
+        React.createElement("img", { className: " size-medium alignright", src: props.person.img, alt: props.person.img, width: "300", height: "300", sizes: "(max-width: 300px) 100vw, 300px" }),
         props.person.bio
       )
     );
@@ -50,7 +44,6 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
   function Filters(props) {
     var titles = window.LMDirectory.titles;
-
     return React.createElement(
       "form",
       { action: "", id: "directory-filters" },
@@ -62,12 +55,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
           { htmlFor: "person-name" },
           "Name:"
         ),
-        React.createElement("input", {
-          type: "text",
-          name: "person_name",
-          placeholder: "Name of employee",
-          id: "person-name"
-        })
+        React.createElement("input", { type: "text", name: "person_name", placeholder: "Name of employee", id: "txt-name" })
       ),
       React.createElement(
         "div",
@@ -146,6 +134,6 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
     return Directory;
   }(React.Component);
 
-  ReactDOM.render(React.createElement(Directory, null), document.getElementById("directory-root"));
+  ReactDOM.render(React.createElement(Directory, null), document.getElementById('directory-root'));
 })();
 //# sourceMappingURL=directory-dist.js.map
