@@ -57,31 +57,33 @@ class StatusMessageList extends React.Component {
   constructor(props) {
     super(props);
 
-    this.stubStatuses = [
-      {
-        id: 1,
-        msg:
-          "The hot tub is currently closed for maintenance.  We expect it to be back up and running within 48 hours.",
-        type: "management",
-        time: "2018-03-30, 09:15"
-      },
-      {
-        id: 2,
-        msg: "The hot tub maintenance is complete.  Please enjoy a dip!",
-        type: "management",
-        time: "2018-03-30, 17:12"
-      },
-      {
-        id: 3,
-        msg:
-          "The rice cooker is on the fritz, any fried rice dishes will require some extra time to cook.",
-        type: "dining",
-        time: "2018-04-02, 15:00"
-      }
-    ];
+    // this.stubStatuses = [
+    //   {
+    //     id: 1,
+    //     msg:
+    //       "The hot tub is currently closed for maintenance.  We expect it to be back up and running within 48 hours.",
+    //     type: "management",
+    //     time: "2018-03-30, 09:15"
+    //   },
+    //   {
+    //     id: 2,
+    //     msg: "The hot tub maintenance is complete.  Please enjoy a dip!",
+    //     type: "management",
+    //     time: "2018-03-30, 17:12"
+    //   },
+    //   {
+    //     id: 3,
+    //     msg:
+    //       "The rice cooker is on the fritz, any fried rice dishes will require some extra time to cook.",
+    //     type: "dining",
+    //     time: "2018-04-02, 15:00"
+    //   }
+    // ];
 
     this.state = {
-      statuses: this.stubStatuses
+      statuses: []
+      // this.stubStatuses
+      isLoaded: false
     };
   }
 
@@ -90,11 +92,13 @@ class StatusMessageList extends React.Component {
   }
 
   retrieveStatusMessages(){
-    axios.get("http://localhost:5500/Ch04/status_api/get.php").then(function(response){
-      this.setState({
-        statuses: response.data
-      });
-    }.bind(this));
+    axios.get("http://localhost:5500/Ch04/status_api/get.php?delay=2")
+        .then((response) => {
+          this.setState({
+            statuses: response.data,
+            isLoaded: true
+          });
+        });
   }
 
   displayStatusMessages() {
@@ -114,7 +118,20 @@ class StatusMessageList extends React.Component {
   }
 
   render() {
-    return <ul id="status-list">{this.displayStatusMessages()}</ul>;
+    if(this.state.isLoaded){
+      return <ul id="status-list">{this.displayStatusMessages()}</ul>;
+    } else {
+      return (
+        <div id="status-list" className="loading">
+          Loading...
+          <div className="spinner">
+            <div className="bounce1" />
+            <div className="bounce2" />
+            <div className="bounce3" />
+          </div>
+        </div>
+      );
+    }
   }
 }
 
