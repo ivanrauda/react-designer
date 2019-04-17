@@ -107,27 +107,35 @@ var StatusMessageList = function (_React$Component2) {
   function StatusMessageList(props) {
     _classCallCheck(this, StatusMessageList);
 
+    // this.stubStatuses = [
+    //   {
+    //     id: 1,
+    //     msg:
+    //       "The hot tub is currently closed for maintenance.  We expect it to be back up and running within 48 hours.",
+    //     type: "management",
+    //     time: "2018-03-30, 09:15"
+    //   },
+    //   {
+    //     id: 2,
+    //     msg: "The hot tub maintenance is complete.  Please enjoy a dip!",
+    //     type: "management",
+    //     time: "2018-03-30, 17:12"
+    //   },
+    //   {
+    //     id: 3,
+    //     msg:
+    //       "The rice cooker is on the fritz, any fried rice dishes will require some extra time to cook.",
+    //     type: "dining",
+    //     time: "2018-04-02, 15:00"
+    //   }
+    // ];
+
     var _this2 = _possibleConstructorReturn(this, (StatusMessageList.__proto__ || Object.getPrototypeOf(StatusMessageList)).call(this, props));
 
-    _this2.stubStatuses = [{
-      id: 1,
-      msg: "The hot tub is currently closed for maintenance.  We expect it to be back up and running within 48 hours.",
-      type: "management",
-      time: "2018-03-30, 09:15"
-    }, {
-      id: 2,
-      msg: "The hot tub maintenance is complete.  Please enjoy a dip!",
-      type: "management",
-      time: "2018-03-30, 17:12"
-    }, {
-      id: 3,
-      msg: "The rice cooker is on the fritz, any fried rice dishes will require some extra time to cook.",
-      type: "dining",
-      time: "2018-04-02, 15:00"
-    }];
-
     _this2.state = {
-      statuses: _this2.stubStatuses
+      statuses: []
+      // this.stubStatuses
+
     };
     return _this2;
   }
@@ -140,11 +148,13 @@ var StatusMessageList = function (_React$Component2) {
   }, {
     key: "retrieveStatusMessages",
     value: function retrieveStatusMessages() {
-      axios.get("http://localhost:5500/Ch04/status_api/get.php").then(function (response) {
-        this.setState({
+      var _this3 = this;
+
+      axios.get("http://localhost:5500/Ch04/status_api/get.php?delay=2").then(function (response) {
+        _this3.setState({
           statuses: response.data
         });
-      }.bind(this));
+      });
     }
   }, {
     key: "displayStatusMessages",
@@ -182,9 +192,9 @@ var StatusMessageManager = function (_React$Component3) {
     _classCallCheck(this, StatusMessageManager);
 
     // just a property, doesn't have to be state
-    var _this3 = _possibleConstructorReturn(this, (StatusMessageManager.__proto__ || Object.getPrototypeOf(StatusMessageManager)).call(this, props));
+    var _this4 = _possibleConstructorReturn(this, (StatusMessageManager.__proto__ || Object.getPrototypeOf(StatusMessageManager)).call(this, props));
 
-    _this3.messageTypes = {
+    _this4.messageTypes = {
       management: "Management",
       dining: "Dining Services",
       ops: "Operations",
@@ -192,10 +202,10 @@ var StatusMessageManager = function (_React$Component3) {
       pool: "Pool"
     };
 
-    _this3.apiUrl = "http://localhost:5500/Ch04/status_api/";
+    _this4.apiUrl = "http://localhost:5500/Ch04/status_api/";
 
-    _this3.state = {};
-    return _this3;
+    _this4.state = {};
+    return _this4;
   }
 
   _createClass(StatusMessageManager, [{
