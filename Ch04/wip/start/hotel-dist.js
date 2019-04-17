@@ -29,6 +29,44 @@ var PostForm = function (_React$Component) {
 
     // so we don't have to type this over and over
     _this.defaultType = _this.typeOptions[0].key;
+
+    _this.state = {
+      messageText: "",
+      messageType: _this.defaultType
+    };
+    _this.handleTextChange = _this.handleTextChange.bind(_this);
+    _this.handleTypeChange = _this.handleTypeChange.bind(_this);
+    _this.postStatusUpdate = _this.postStatusUpdate.bind(_this);
+
+    function handleTextChange(event) {
+      this.setState({
+        messageText: event.target.value
+      });
+    }
+
+    function handleTypeChange(event) {
+      this.setState({
+        messageType: event.target.value
+      });
+    }
+
+    function postStatusUpdate(event) {
+      event.preventDefault();
+
+      var newStatus = {
+        msg: this.state.messageText,
+        type: this.state.messageType,
+        time: date.format(new Date(), "YYYY-MM-DD, HH:mm")
+      };
+
+      axios.post(this.props.apiUrl + "/post.php", newStatus).then(function (response) {
+        console.log(response);
+
+        if (response.data.success) {
+          // Update state
+        }
+      }.bind(this));
+    }
     return _this;
   }
 
@@ -37,7 +75,7 @@ var PostForm = function (_React$Component) {
     value: function render() {
       return React.createElement(
         "form",
-        null,
+        { onSubmit: this.postStatusUpdate },
         React.createElement(
           "h3",
           null,
@@ -51,7 +89,7 @@ var PostForm = function (_React$Component) {
             { htmlFor: "txt-message" },
             "Message"
           ),
-          React.createElement("textarea", { id: "txt-message", rows: "2" })
+          React.createElement("textarea", { id: "txt-message", rows: "2", onChange: this.handleTextChange, value: this.state.messageText })
         ),
         React.createElement(
           "div",
@@ -63,7 +101,7 @@ var PostForm = function (_React$Component) {
           ),
           React.createElement(
             "select",
-            { id: "txt-type" },
+            { id: "txt-type", onChange: this.handleTypeChange, value: this.state.messageType },
             this.typeOptions
           )
         ),
@@ -107,37 +145,13 @@ var StatusMessageList = function (_React$Component2) {
   function StatusMessageList(props) {
     _classCallCheck(this, StatusMessageList);
 
-    // this.stubStatuses = [
-    //   {
-    //     id: 1,
-    //     msg:
-    //       "The hot tub is currently closed for maintenance.  We expect it to be back up and running within 48 hours.",
-    //     type: "management",
-    //     time: "2018-03-30, 09:15"
-    //   },
-    //   {
-    //     id: 2,
-    //     msg: "The hot tub maintenance is complete.  Please enjoy a dip!",
-    //     type: "management",
-    //     time: "2018-03-30, 17:12"
-    //   },
-    //   {
-    //     id: 3,
-    //     msg:
-    //       "The rice cooker is on the fritz, any fried rice dishes will require some extra time to cook.",
-    //     type: "dining",
-    //     time: "2018-04-02, 15:00"
-    //   }
-    // ];
+    return _possibleConstructorReturn(this, (StatusMessageList.__proto__ || Object.getPrototypeOf(StatusMessageList)).call(this, props));
 
-    var _this2 = _possibleConstructorReturn(this, (StatusMessageList.__proto__ || Object.getPrototypeOf(StatusMessageList)).call(this, props));
-
-    _this2.state = {
-      statuses: []
-      // this.stubStatuses
-
-    };
-    return _this2;
+    // this.state = {
+    //   statuses: [],
+    //   // this.stubStatuses
+    //   isLoaded: false
+    // };
   }
 
   _createClass(StatusMessageList, [{
@@ -150,9 +164,10 @@ var StatusMessageList = function (_React$Component2) {
     value: function retrieveStatusMessages() {
       var _this3 = this;
 
-      axios.get("http://localhost:5500/Ch04/status_api/get.php?delay=2").then(function (response) {
+      axios.get(this.props.apiUrl + "/get.php?delay=5").then(function (response) {
         _this3.setState({
-          statuses: response.data
+          statuses: response.data,
+          isLoaded: true
         });
       });
     }
@@ -174,11 +189,26 @@ var StatusMessageList = function (_React$Component2) {
   }, {
     key: "render",
     value: function render() {
-      return React.createElement(
-        "ul",
-        { id: "status-list" },
-        this.displayStatusMessages()
-      );
+      if (this.state.isLoaded) {
+        return React.createElement(
+          "ul",
+          { id: "status-list" },
+          this.displayStatusMessages()
+        );
+      } else {
+        return React.createElement(
+          "div",
+          { id: "status-list", className: "loading" },
+          "Loading...",
+          React.createElement(
+            "div",
+            { className: "spinner" },
+            React.createElement("div", { className: "bounce1" }),
+            React.createElement("div", { className: "bounce2" }),
+            React.createElement("div", { className: "bounce3" })
+          )
+        );
+      }
     }
   }]);
 
@@ -217,9 +247,9 @@ var StatusMessageManager = function (_React$Component3) {
         React.createElement(
           "div",
           { id: "post-status" },
-          React.createElement(PostForm, { messageTypes: this.messageTypes })
+          React.createElement(PostForm, { messageTypes: this.messageTypes, apiUrl: this.apiUrl })
         ),
-        React.createElement(StatusMessageList, { messageTypes: this.messageTypes })
+        React.createElement(StatusMessageList, { messageTypes: this.messageTypes, apiUrl: this.apiUrl })
       );
     }
   }]);
