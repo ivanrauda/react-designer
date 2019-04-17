@@ -133,6 +133,20 @@ var StatusMessageList = function (_React$Component2) {
   }
 
   _createClass(StatusMessageList, [{
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      this.retrieveStatusMessages();
+    }
+  }, {
+    key: "retrieveStatusMessages",
+    value: function retrieveStatusMessages() {
+      axios.get("http://localhost:5500/Ch04/status_api/get.php").then(function (response) {
+        this.setState({
+          statuses: response.data
+        });
+      }.bind(this));
+    }
+  }, {
     key: "displayStatusMessages",
     value: function displayStatusMessages() {
       return this.state.statuses.map(function (status) {
@@ -178,7 +192,7 @@ var StatusMessageManager = function (_React$Component3) {
       pool: "Pool"
     };
 
-    _this3.apiUrl = "http://localhost/reactjs/status_api";
+    _this3.apiUrl = "http://localhost:5500/Ch04/status_api/";
 
     _this3.state = {};
     return _this3;

@@ -85,6 +85,18 @@ class StatusMessageList extends React.Component {
     };
   }
 
+  componentDidMount(){
+    this.retrieveStatusMessages()
+  }
+
+  retrieveStatusMessages(){
+    axios.get("http://localhost:5500/Ch04/status_api/get.php").then(function(response){
+      this.setState({
+        statuses: response.data
+      });
+    }.bind(this));
+  }
+
   displayStatusMessages() {
     return this.state.statuses.map(
       function(status) {
@@ -119,7 +131,7 @@ class StatusMessageManager extends React.Component {
       pool: "Pool"
     };
 
-    this.apiUrl = "http://localhost/reactjs/status_api";
+    this.apiUrl = "http://localhost:5500/Ch04/status_api/";
 
     this.state = {};
   }
