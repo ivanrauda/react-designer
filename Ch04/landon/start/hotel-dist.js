@@ -43,22 +43,22 @@ var PostForm = function (_React$Component) {
 
   _createClass(PostForm, [{
     key: "handleTextChange",
-    value: function handleTextChange(evt) {
+    value: function handleTextChange(event) {
       this.setState({
-        messageText: evt.target.value
+        messageText: event.target.value
       });
     }
   }, {
     key: "handleTypeChange",
-    value: function handleTypeChange(evt) {
+    value: function handleTypeChange(event) {
       this.setState({
-        messageType: evt.target.value
+        messageType: event.target.value
       });
     }
   }, {
     key: "postStatusUpdate",
-    value: function postStatusUpdate(evt) {
-      evt.preventDefault();
+    value: function postStatusUpdate(event) {
+      event.preventDefault();
 
       var newStatus = {
         msg: this.state.messageText,
@@ -67,11 +67,14 @@ var PostForm = function (_React$Component) {
       };
 
       axios.post(this.props.apiUrl + "/post.php", newStatus).then(function (response) {
-        console.log(response);
-
         if (response.data.success) {
-          // Update state
+          this.setState({
+            messageText: '',
+            messageTyep: this.defaultType
+          });
         }
+        newStatus.id = response.data.id;
+        this.props.addStatusMessage(newStatus);
       }.bind(this));
     }
   }, {
@@ -93,12 +96,7 @@ var PostForm = function (_React$Component) {
             { htmlFor: "txt-message" },
             "Message"
           ),
-          React.createElement("textarea", {
-            id: "txt-message",
-            rows: "2",
-            onChange: this.handleTextChange,
-            value: this.state.messageText
-          })
+          React.createElement("textarea", { id: "txt-message", rows: "2", onChange: this.handleTextChange, value: this.state.messageText })
         ),
         React.createElement(
           "div",
@@ -110,10 +108,7 @@ var PostForm = function (_React$Component) {
           ),
           React.createElement(
             "select",
-            {
-              id: "txt-type",
-              onChange: this.handleTypeChange,
-              value: this.state.messageType },
+            { id: "txt-type", onChange: this.handleTypeChange, value: this.state.messageType },
             this.typeOptions
           )
         ),
@@ -157,34 +152,18 @@ var StatusMessageList = function (_React$Component2) {
   function StatusMessageList(props) {
     _classCallCheck(this, StatusMessageList);
 
-    var _this2 = _possibleConstructorReturn(this, (StatusMessageList.__proto__ || Object.getPrototypeOf(StatusMessageList)).call(this, props));
-
-    _this2.state = {
-      statuses: [],
-      isLoaded: false
-    };
-    return _this2;
+    return _possibleConstructorReturn(this, (StatusMessageList.__proto__ || Object.getPrototypeOf(StatusMessageList)).call(this, props));
   }
 
   _createClass(StatusMessageList, [{
     key: "componentDidMount",
     value: function componentDidMount() {
-      this.retrieveStatusMessages();
-    }
-  }, {
-    key: "retrieveStatusMessages",
-    value: function retrieveStatusMessages() {
-      axios.get(this.props.apiUrl + "/get.php?delay=5").then(function (response) {
-        this.setState({
-          statuses: response.data,
-          isLoaded: true
-        });
-      }.bind(this));
+      //this.retrieveStatusMessages()
     }
   }, {
     key: "displayStatusMessages",
     value: function displayStatusMessages() {
-      return this.state.statuses.map(function (status) {
+      return this.props.statuses.map(function (status) {
         return React.createElement(
           "li",
           { key: status.id },
@@ -199,7 +178,7 @@ var StatusMessageList = function (_React$Component2) {
   }, {
     key: "render",
     value: function render() {
-      if (this.state.isLoaded) {
+      if (this.props.isLoaded) {
         return React.createElement(
           "ul",
           { id: "status-list" },
@@ -242,13 +221,43 @@ var StatusMessageManager = function (_React$Component3) {
       pool: "Pool"
     };
 
-    _this3.apiUrl = "http://localhost/reactjs/status_api";
+    _this3.apiUrl = "http://localhost:5500/Ch04/status_api/";
 
-    _this3.state = {};
+    _this3.state = {
+      statuses: [],
+      isLoaded: false
+    };
+    _this3.addStatusMessage = _this3.addStatusMessage.bind(_this3);
     return _this3;
   }
 
   _createClass(StatusMessageManager, [{
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      this.retrieveStatusMessage();
+    }
+  }, {
+    key: "retrieveStatusMessages",
+    value: function retrieveStatusMessages() {
+      var _this4 = this;
+
+      axios.get(this.props.apiUrl + "/get.php?delay=5").then(function (response) {
+        _this4.setState({
+          statuses: response.data,
+          isLoaded: true
+        });
+      });
+    }
+  }, {
+    key: "addStatusMessage",
+    value: function addStatusMessage(status) {
+      var updatedStatuses = this.state.statuses.slice(0);
+      updatedStatuses.push(status);
+      this.setState({
+        statuses: updatedStatuses
+      });
+    }
+  }, {
     key: "render",
     value: function render() {
       return React.createElement(
@@ -257,9 +266,9 @@ var StatusMessageManager = function (_React$Component3) {
         React.createElement(
           "div",
           { id: "post-status" },
-          React.createElement(PostForm, { messageTypes: this.messageTypes, apiUrl: this.apiUrl })
+          React.createElement(PostForm, { messageTypes: this.messageTypes, apiUrl: this.apiUrl, addStatusMessage: this.addStatusMessage })
         ),
-        React.createElement(StatusMessageList, { messageTypes: this.messageTypes, apiUrl: this.apiUrl })
+        React.createElement(StatusMessageList, { messageTypes: this.messageTypes, statuses: this.state.statuses, isLoaded: this.state.isLoaded })
       );
     }
   }]);
