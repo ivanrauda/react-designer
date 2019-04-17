@@ -47,7 +47,53 @@
         <div class="content">
           <h2>Status Updates</h2>
 
-          <div id="react-statusmanager"></div>
+          <div id="post-status">
+            <form>
+              <h3>Post an Update</h3>
+
+              <div class="field-group">
+                <label for="txt-message">Message</label>
+                <textarea id="txt-message" rows="2"></textarea>
+              </div>
+
+              <div class="field-group">
+                <label for="txt-type">Type</label>
+                <select id="txt-type">
+                  <option value="ops">Operations</option>
+                  <option value="plumbing">Plumbing</option>
+                  <option value="pool">Pool</option>
+                </select>
+              </div>
+
+              <div class="field-group action">
+                <input type="submit" value="Post Update">
+              </div>
+
+            </form>
+          </div>
+
+          <ul id="status-list">
+            <li>
+              The hot tub is currently closed for maintenance.  We expect it to be back up and running within 48 hours.
+              <span class="name">— Management</span>
+              <span class="time">4/5/2018, 9:15 AM</span>
+            </li>
+            <li>
+              The hot tub is currently closed for maintenance.  We expect it to be back up and running within 48 hours.
+              <span class="name">— Management</span>
+              <span class="time">4/5/2018, 9:15 AM</span>
+            </li>
+            <li>
+              The hot tub is currently closed for maintenance.  We expect it to be back up and running within 48 hours.
+              <span class="name">— Management</span>
+              <span class="time">4/5/2018, 9:15 AM</span>
+            </li>
+            <li>
+              The hot tub is currently closed for maintenance.  We expect it to be back up and running within 48 hours.
+              <span class="name">— Management</span>
+              <span class="time">4/5/2018, 9:15 AM</span>
+            </li>
+          </ul>
         </div><!-- content -->
       </article><!-- article -->
   </div><!-- events -->
@@ -69,20 +115,11 @@
     </div>
   </article>
 </footer>
-  <!--<script src="../../../landonhotel.com/js/script.js"></script>-->
+  <!-- <script src="../../../landonhotel.com/js/script.js"></script> -->
 
   <script crossorigin src="https://unpkg.com/date-and-time@0.6/date-and-time.js"></script>
   <script>window.date || document.write('<script crossorigin src="../../../node_modules/date-and-time/date-and-time.js"><\/script>')</script>
 
-  <!--
-  Polyfill for ES6 promise support for axios
-  <script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.auto.js"></script>
-  -->
-
-  <script crossorigin src="https://unpkg.com/axios@0.17/dist/axios.min.js"></script>
-  <script>window.axios || document.write('<script crossorigin src="../../../node_modules/axios/dist/axios.min.js"><\/script>')</script>
- 
   <!--
   Polyfills for older browsers
   @see https://reactjs.org/docs/javascript-environment-requirements.html
@@ -96,7 +133,7 @@
   <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
   <script>window.ReactDOM || document.write('<script crossorigin src="../../../node_modules/react-dom/umd/react-dom.development.js"><\/script>')</script>
 
-  <script src="hotel-dist.js"></script>
+  <script src="hotel.js"></script>
 </body>
 
 </html>

@@ -2,3 +2,9 @@
 /dist
 .DS_Store
 
+Name: Comment Tag
+Id: a9.comment-tag
+Description: 
+Version: 0.0.2
+Publisher: a9
+VS Marketplace Link: https://marketplace.visualstudio.com/items?itemName=a9.comment-tag
